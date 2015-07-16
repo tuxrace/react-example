@@ -1,41 +1,20 @@
-var record = [];
-
-var Country = React.createClass({
-getInitialState: function(){
-	return ({list:''});
-},
-render: function(){
-	return (<div> 
-			  <h1> Country App </h1>
-				<input type="text" onChange={this.setSearch}/>
-				<ul>
-				{this.state.list}
-				</ul>
-			</div>);
-},
-componentDidMount: function(){
-	RH.get(this.props.remoteurl,
-	function(result){
-		var result = JSON.parse(result);
-		var objectlist = result.map(function(x){
-			record.push(x);
-			return (<li> {x.name} </li>);				
-		});
-		this.setState({list:objectlist});
-	}.bind(this));
-},
-setSearch: function(e){		
-	var objectlist = record.map(function(x){
-		return  x.name;
-	})
-	.filter(/./.test.bind(new RegExp(e.target.value, "gi")))
-	.map(function(x, y){			
-		return (<li> {x} </li>);				
-	});		
-	
-	this.setState({list:objectlist});
-	console.log(testfilter);
-}
+var Hello = React.createClass({
+	getInitialState: function(){
+		return ({count: 0});
+	},
+	render: function(){
+	return (<div>
+	         <h1>
+	           Hello {this.props.name}, 
+			   age: {this.props.age},
+			   count: {this.state.count}
+			 </h1>
+			 <button onClick={this.handleChange}>Click me</button>
+			 </div>);
+	},
+	handleChange: function(){
+		this.setState({count: this.state.count + 1});
+	}
 });
-	
-React.render(<Country remoteurl="https://restcountries.eu/rest/v1/all" />, document.getElementById('MainApp'));
+
+React.render(<Hello name="John" age="20" />, document.getElementById('MainApp'));

@@ -1,36 +1,41 @@
-var TodoList = React.createClass({
-  render: function() {
-    var createItem = function(itemText) {
-      return <li>{itemText}</li>;
-    };
-    return <ul>{this.props.items.map(createItem)}</ul>;
-  }
-});
-var TodoApp = React.createClass({
-  getInitialState: function() {
-    return {items: [], text: ''};
-  },
-  onChange: function(e) {
-    this.setState({text: e.target.value});
-  },
-  handleSubmit: function(e) {
-    e.preventDefault();
-    var nextItems = this.state.items.concat([this.state.text]);
-    var nextText = '';
-    this.setState({items: nextItems, text: nextText});
-  },
-  render: function() {
-    return (
-      <div>
-        <h3>TODO</h3>
-        <TodoList items={this.state.items} />
-        <form onSubmit={this.handleSubmit}>
-          <input onChange={this.onChange} value={this.state.text} />
-          <button>{'Add #' + (this.state.items.length + 1)}</button>
-        </form>
-      </div>
-    );
-  }
-});
+var record = [];
 
-React.render(<TodoApp />, document.getElementById('TodoApp'));
+var Country = React.createClass({
+getInitialState: function(){
+	return ({list:''});
+},
+render: function(){
+	return (<div> 
+			  <h1> Country App </h1>
+				<input type="text" onChange={this.setSearch}/>
+				<ul>
+				{this.state.list}
+				</ul>
+			</div>);
+},
+componentDidMount: function(){
+	RH.get(this.props.remoteurl,
+	function(result){
+		var result = JSON.parse(result);
+		var objectlist = result.map(function(x){
+			record.push(x);
+			return (<li> {x.name} </li>);				
+		});
+		this.setState({list:objectlist});
+	}.bind(this));
+},
+setSearch: function(e){		
+	var objectlist = record.map(function(x){
+		return  x.name;
+	})
+	.filter(/./.test.bind(new RegExp(e.target.value, "gi")))
+	.map(function(x, y){			
+		return (<li> {x} </li>);				
+	});		
+	
+	this.setState({list:objectlist});
+	console.log(testfilter);
+}
+});
+	
+React.render(<Country remoteurl="https://restcountries.eu/rest/v1/all" />, document.getElementById('MainApp'));

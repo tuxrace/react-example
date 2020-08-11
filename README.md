@@ -1,4 +1,4 @@
-#React Example
+# React Example
 
 React hello component example, using props, state and events
 
